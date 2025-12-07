@@ -1,0 +1,135 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<IdentityUser> SignInManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ClinicManagement</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ClinicManagement.styles.css" asp-append-version="true" />
+
+    <style>
+        .navbar-nav .nav-link {
+            transition: 0.2s ease-in-out;
+            font-weight: 500;
+        }
+
+            .navbar-nav .nav-link:hover {
+                color: #ffeb99 !important;
+                transform: translateY(-2px);
+            }
+
+        .navbar-brand {
+            font-size: 1.35rem;
+            letter-spacing: .5px;
+        }
+
+        .navbar {
+            background: linear-gradient(90deg, #1f6fb2, #3f8bd6);
+        }
+
+        #topNavbar {
+            font-size: .95rem;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-primary shadow-sm mb-3">
+            <div class="container-fluid">
+
+                <!-- BRAND -->
+                <a class="navbar-brand fw-bold text-white" asp-area="" asp-controller="Home" asp-action="Index">
+                    🏥 ClinicManagement
+                </a>
+
+                <!-- MOBILE BUTTON -->
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#topNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- NAV ITEMS -->
+                <div class="collapse navbar-collapse" id="topNavbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light fw-semibold" asp-controller="Admin" asp-action="Index">Admin Panel</a>
+                            </li>
+                        }
+
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Doctor"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-controller="Patients" asp-action="Index">Patients</a>
+                            </li>
+                        }
+
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Secretary"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-controller="Appointment" asp-action="Index">Appointments</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-warning fw-bold" asp-controller="Appointment" asp-action="Today">Today's Schedule</a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Doctor"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-controller="Appointment" asp-action="MyAppointments">My Appointments</a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Secretary"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Appointment" asp-action="PaymentStatusList">
+                                    💳 Payment Status
+                                </a>
+                            </li>
+                        }
+
+                    </ul>
+
+                    <div class="d-flex">
+                        <partial name="_LoginPartial" />
+                    </div>
+
+                </div>
+
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - ClinicManagement - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

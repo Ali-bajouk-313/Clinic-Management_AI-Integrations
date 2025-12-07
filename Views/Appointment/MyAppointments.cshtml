@@ -1,0 +1,133 @@
+﻿@model IEnumerable<ClinicManagement.Models.Appointment>
+
+<style>
+    .title-appointments {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1c5ca8;
+    }
+
+    .appt-table {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0px 4px 14px rgba(0,0,0,0.08);
+    }
+
+        .appt-table thead th {
+            background: #0f4572 !important;
+            color: #fff;
+            text-align: center;
+        }
+
+        .appt-table tbody td {
+            vertical-align: middle;
+        }
+
+        .appt-table tbody tr:hover {
+            background: #ecf3ff;
+        }
+
+    .btn-sm {
+        border-radius: 6px !important;
+    }
+
+    .btn-outline-primary {
+        border-width: 1px;
+    }
+
+    .btn-outline-info {
+        border-width: 1px;
+    }
+
+    .btn-outline-success {
+        border-width: 1px;
+    }
+
+    #aiSummaryModal .modal-header {
+        background-color: #0f4572;
+        color: white;
+    }
+</style>
+
+<div class="container mt-4">
+    <h2 class="title-appointments">👨‍⚕️ My Appointments</h2>
+    <hr />
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info mt-4">No appointments found.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover appt-table">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Patient</th>
+                        <th>Notes</th>
+                        <th>Patient History</th>
+                        <th>Notes</th>
+                        <th>AI Summary</th>
+                        <th>Chat AI</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var appt in Model)
+                    {
+                        <tr>
+                            <td>@appt.Date.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@appt.Patient?.Name</td>
+                            <td>@(appt.Notes ?? "-")</td>
+
+                            <td>
+                                <a asp-controller="Patients" asp-action="History" asp-route-id="@appt.PatientId">
+                                    @appt.Patient?.Name
+                                </a>
+                            </td>
+
+                            <td>
+                                <a asp-controller="Appointment" asp-action="AddNotesDr" asp-route-id="@appt.Id"
+                                   class="btn btn-sm btn-outline-primary">
+                                    Add Notes
+                                </a>
+                            </td>
+
+                            <td> @if (string.IsNullOrEmpty(appt.AISummary)) {
+                            <a asp-action="GenerateAISummary" asp-route-id="@appt.Id" class="btn btn-sm btn-info"> Generate AI Summary </a>
+                        } else
+                        {
+
+                            <a asp-action="ViewAISummary" asp-route-id="@appt.Id" class="btn btn-sm btn-success"> View Summary </a>
+                        }
+                        </td>
+                            <td>
+                                <a asp-action="AiChat" asp-route-id="@appt.Id" class="btn btn-sm btn-outline-dark">
+                                    💬 Chat with AI
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    <!-- Modal UI unchanged -->
+    <div class="modal fade" id="aiSummaryModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">AI Medical Summary</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body" id="aiSummaryContent">
+                    Loading summary...
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

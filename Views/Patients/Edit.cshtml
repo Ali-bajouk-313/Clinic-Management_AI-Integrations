@@ -1,0 +1,65 @@
+﻿@model ClinicManagement.Models.Patient
+
+@{
+    ViewData["Title"] = "Edit Patient";
+}
+
+<div class="container mt-4">
+
+    <h2 class="mb-3">Edit Patient Information</h2>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-6">
+
+            <form asp-action="Edit" method="post" class="border p-4 rounded shadow-sm bg-light">
+
+                <input type="hidden" asp-for="Id" />
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label fw-bold">Patient Name</label>
+                    <input asp-for="Name" class="form-control" placeholder="Enter name" />
+                    <span asp-validation-for="Name" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Age" class="form-label fw-bold">Age</label>
+                    <input asp-for="Age" class="form-control" placeholder="Enter age" />
+                    <span asp-validation-for="Age" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Diagnosis" class="form-label fw-bold">Diagnosis</label>
+                    <input asp-for="Diagnosis" class="form-control" placeholder="Enter diagnosis" />
+                    <span asp-validation-for="Diagnosis" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DateOfVisit" class="form-label fw-bold">Visit Date</label>
+                    <input asp-for="DateOfVisit" type="date" class="form-control" />
+                    <span asp-validation-for="DateOfVisit" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DateOfRevisit" class="form-label fw-bold">Next Visit</label>
+                    <input asp-for="DateOfRevisit" type="date" class="form-control" />
+                    <span asp-validation-for="DateOfRevisit" class="text-danger small"></span>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    <button type="submit" class="btn btn-success">Save Changes</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

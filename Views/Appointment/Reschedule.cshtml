@@ -1,0 +1,30 @@
+﻿@model ClinicManagement.Models.Appointment
+
+@{
+    ViewData["Title"] = "Reschedule Appointment";
+}
+
+<div class="container mt-4 col-md-6">
+
+    <h3 class="fw-bold">Reschedule Appointment</h3>
+    <p>Change the appointment date for:</p>
+
+    <ul>
+        <li><strong>Patient:</strong> @Model.Patient?.Name</li>
+        <li><strong>Doctor:</strong> @Model.Doctor?.Email</li>
+    </ul>
+
+    <form asp-action="Reschedule" method="post">
+
+        <input type="hidden" name="id" value="@Model.Id" />
+
+        <div class="mb-3">
+            <label class="form-label">New Date & Time</label>
+            <input type="datetime-local" name="newDate" class="form-control" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save New Date</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+
+    </form>
+</div>

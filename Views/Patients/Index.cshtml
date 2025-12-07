@@ -1,0 +1,100 @@
+﻿@model IEnumerable<ClinicManagement.Models.Patient>
+
+@{
+    ViewData["Title"] = "Patients";
+}
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 mb-0">Patients</h1>
+        <div>
+            <a class="btn btn-primary" asp-action="Create"><i class="bi bi-plus-lg"></i> Create New</a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                        <input id="searchBox" type="search" class="form-control" placeholder="Search by name, diagnosis or doctor..." aria-label="Search patients">
+                    </div>
+                </div>
+                <div class="col-md-6 text-md-end text-muted align-self-center">
+                    <small class="me-2">Total: <span id="patientCount">@Model?.Count() ?? 0</span></small>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle" id="patientsTable">
+                    <thead class="table-light">
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Name)</th>
+                            <th>@Html.DisplayNameFor(model => model.Age)</th>
+                            <th>@Html.DisplayNameFor(model => model.Diagnosis)</th>
+                            <th>@Html.DisplayNameFor(model => model.DateOfVisit)</th>
+                            <th>@Html.DisplayNameFor(model => model.DateOfRevisit)</th>
+               
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Age)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Diagnosis)</td>
+                                    <td>@(item.DateOfVisit.ToString("d"))</td>
+                                    <td>@(item.DateOfRevisit.HasValue ? item.DateOfRevisit.Value.ToString("d") : "-")</td>
+                                    <td class="text-end">
+                                        <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                        <a class="btn btn-sm btn-outline-info mx-1" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                        <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center text-muted">No patients found.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const searchBox = document.getElementById('searchBox');
+            const table = document.getElementById('patientsTable');
+            const rows = table ? table.tBodies[0].rows : [];
+            const countEl = document.getElementById('patientCount');
+
+            function filterRows() {
+                const q = searchBox.value.trim().toLowerCase();
+                let visible = 0;
+                for (let i = 0; i < rows.length; i++) {
+                    const cells = rows[i].cells;
+                    const name = cells[0].innerText.toLowerCase();
+                    const diagnosis = cells[2].innerText.toLowerCase();
+                    const doctor = cells[5].innerText.toLowerCase();
+                    const match = !q || name.includes(q) || diagnosis.includes(q) || doctor.includes(q);
+                    rows[i].style.display = match ? '' : 'none';
+                    if (match) visible++;
+                }
+                if (countEl) countEl.textContent = visible;
+            }
+
+            if (searchBox) searchBox.addEventListener('input', filterRows);
+        })();
+    </script>
+}

@@ -1,0 +1,81 @@
+﻿@model IEnumerable<ClinicManagement.Models.Appointment>
+
+<style>
+    .pay-title {
+        font-size: 27px;
+        font-weight: 700;
+        color: #124f8a;
+        margin-bottom: 15px;
+    }
+
+    .payment-table {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0px 4px 14px rgba(0,0,0,0.08);
+    }
+
+        .payment-table thead th {
+            background: #0e406c !important;
+            color: white;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .payment-table tbody td {
+            vertical-align: middle;
+        }
+
+        .payment-table tbody tr:hover {
+            background-color: #eef5ff !important;
+        }
+
+    .badge {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+    }
+
+</style>
+
+<h2 class="pay-title">💳 Payment Status</h2>
+
+<div class="table-responsive">
+    <table class="table table-bordered payment-table">
+        <thead>
+            <tr>
+                <th>Patient</th>
+                <th>Appointment Date</th>
+                <th>Amount</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><strong>@item.Patient.Name</strong></td>
+                    <td>@item.Date.ToString("g")</td>
+                    <td>
+                        @if (item.Payment != null)
+                        {
+                            <span>$@item.Payment.Amount</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted">-</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.Payment != null)
+                        {
+                            <span class="badge bg-success">PAID</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">NOT PAID</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

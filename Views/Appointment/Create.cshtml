@@ -1,0 +1,40 @@
+﻿@model ClinicManagement.Models.Appointment
+
+<div class="container mt-4">
+
+    <h2>Create Appointment</h2>
+    <form asp-action="Create">
+
+        <div class="mb-3">
+            <label class="form-label">Select Patient</label>
+            <select asp-for="PatientId" class="form-control">
+                @foreach (var p in ViewBag.Patients)
+                {
+                    <option value="@p.Id">@p.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Select Doctor</label>
+            <select asp-for="DoctorId" class="form-control">
+                @foreach (var d in ViewBag.Doctors)
+                {
+                    <option value="@d.Id">@d.Email</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Appointment Date</label>
+            <input type="datetime-local" asp-for="Date" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Notes</label>
+            <textarea asp-for="Notes" class="form-control"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-success">Create</button>
+    </form>
+</div>

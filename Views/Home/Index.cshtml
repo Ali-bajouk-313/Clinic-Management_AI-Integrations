@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container mt-5">
+
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-primary">🏥 Clinic Management System</h1>
+        <p class="lead text-secondary">
+            Welcome to the clinic portal — manage appointments, patients, billing, and more.
+        </p>
+    </div>
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title fw-semibold text-primary">📅 Appointments</h5>
+                    <p class="card-text text-secondary">
+                        View and manage scheduled patient appointments.
+                    </p>
+                    <a asp-controller="Appointment" asp-action="MyAppointments" class="btn btn-outline-primary">
+                        View Appointments
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title fw-semibold text-primary">🧑‍⚕️ Patient Records</h5>
+                    <p class="card-text text-secondary">
+                        Access patient medical history and personal data.
+                    </p>
+                    <a asp-controller="Patients" asp-action="Index" class="btn btn-outline-primary">
+                        Patient List
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title fw-semibold text-primary">💳 Payments</h5>
+                    <p class="card-text text-secondary">
+                        Track payments, invoices, and transaction history.
+                    </p>
+                    <a asp-controller="Payment" asp-action="Index" class="btn btn-outline-primary">
+                        View Payments
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

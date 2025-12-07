@@ -1,0 +1,101 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+
+@model IEnumerable<IdentityUser>
+
+@{
+    ViewData["Title"] = "Manage Users";
+}
+
+<style>
+    .page-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1d5ba6;
+    }
+
+    .users-table {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0px 4px 14px rgba(0,0,0,0.09);
+    }
+
+        .users-table thead th {
+            background: #103f75 !important;
+            color: #fff;
+            text-align: center;
+            border-bottom: 3px solid #0d3058;
+        }
+
+        .users-table tbody tr {
+            transition: .15s ease-in-out;
+        }
+
+            .users-table tbody tr:hover {
+                background-color: #e8f1ff;
+            }
+
+    .badge-role {
+        display: inline-block;
+        background-color: #e2e8f0;
+        color: #1e293b;
+        font-size: 0.85rem;
+        padding: 5px 8px;
+        border-radius: 6px;
+        margin: 2px;
+    }
+
+    .btn-sm {
+        padding: 4px 10px;
+        border-radius: 6px;
+    }
+
+</style>
+
+<div class="container mt-4">
+    <h2 class="page-title mb-3">👥 Manage Users</h2>
+    <p class="text-muted mb-4">View all registered users and manage their roles.</p>
+
+    <div class="table-responsive">
+        <table class="table table-bordered users-table">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>User ID</th>
+                    <th>Roles</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    var roles = await UserManager.GetRolesAsync(user);
+
+                    <tr>
+                        <td>@user.Email</td>
+                        <td>@user.Id</td>
+                        <td>
+                            @if (roles.Count == 0)
+                            {
+                                <span class="text-muted">No roles</span>
+                            }
+                            else
+                            {
+                                @foreach (var role in roles)
+                                {
+                                    <span class="badge-role">@role</span>
+                                }
+                            }
+                        </td>
+
+                        <td class="text-center">
+                            <a href="/AssignRole/Edit/@user.Id" class="btn btn-outline-primary btn-sm">Change Role</a>
+                            <a href="/Admin/DeleteUser/@user.Id" class="btn btn-outline-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

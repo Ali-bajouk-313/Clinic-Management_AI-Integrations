@@ -1,0 +1,119 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model Dictionary<IdentityUser, List<ClinicManagement.Models.Patient>>
+
+@{
+    ViewData["Title"] = "Patients by Doctor";
+}
+
+<style>
+    .page-title {
+        font-size: 32px;
+        font-weight: 700;
+        color: #1a5faa;
+    }
+
+    .doctor-card {
+        border-radius: 12px;
+        border: none;
+        background: #ffffff;
+        transition: all 0.2s ease-in-out;
+    }
+
+        .doctor-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0px 10px 22px rgba(0,0,0,0.12);
+        }
+
+    .card-header-custom {
+        background: linear-gradient(45deg, #0d6efd, #1d56b3);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .patient-table thead th {
+        background-color: #194f8c !important;
+        color: #fff;
+        text-align: center;
+    }
+
+    .patient-table tbody td {
+        vertical-align: middle;
+    }
+
+    .light-badge {
+        background-color: #e2e8f0;
+        color: #1e293b;
+        font-weight: 500;
+        padding: 6px 10px;
+        border-radius: 8px;
+    }
+
+    .doctor-label {
+        font-weight: 600;
+    }
+
+</style>
+
+<div class="container mt-4">
+    <h2 class="mb-4 page-title">
+        👨‍⚕️ Patients Grouped by Doctor
+    </h2>
+
+    @foreach (var entry in Model)
+    {
+        var doctor = entry.Key;
+        var patients = entry.Value;
+
+        <div class="card doctor-card shadow-sm mb-4">
+            <div class="card-header card-header-custom d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="mb-0">
+                        👨‍⚕️ Doctor: <span class="doctor-label">@doctor.Email</span>
+                    </h5>
+                </div>
+                <span class="light-badge">
+                    @patients.Count patients
+                </span>
+            </div>
+
+            <div class="card-body">
+
+                @if (!patients.Any())
+                {
+                    <div class="alert alert-secondary">
+                        <i class="bi bi-info-circle"></i> No patients assigned to this doctor.
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover patient-table">
+                            <thead>
+                                <tr>
+                                    <th>Patient Name</th>
+                                    <th>Age</th>
+                                    <th>Diagnosis</th>
+                                    <th>Visit Date</th>
+                                    <th>Next Visit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var patient in patients)
+                                {
+                                    <tr>
+                                        <td>@patient.Name</td>
+                                        <td>@patient.Age</td>
+                                        <td>@patient.Diagnosis</td>
+                                        <td>@patient.DateOfVisit.ToShortDateString()</td>
+                                        <td>@(patient.DateOfRevisit?.ToShortDateString() ?? "-")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>

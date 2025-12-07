@@ -1,0 +1,54 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+    <div class="card shadow-lg border-0" style="width: 460px;">
+        <div class="card-header text-white text-center" style="background-color: #2a6ebb;">
+            <h3 class="mb-0">Create a Clinic Account</h3>
+        </div>
+        <div class="card-body p-4">
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+
+                <div asp-validation-summary="ModelOnly" class="text-danger text-center mb-3" role="alert"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.Email" class="form-label fw-semibold">Email address</label>
+                    <input asp-for="Input.Email" class="form-control" placeholder="name@example.com" />
+                    <span asp-validation-for="Input.Email" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.Password" class="form-label fw-semibold">Password</label>
+                    <input asp-for="Input.Password" class="form-control" placeholder="••••••••" />
+                    <span asp-validation-for="Input.Password" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.ConfirmPassword" class="form-label fw-semibold">Confirm Password</label>
+                    <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="••••••••" />
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger small"></span>
+                </div>
+
+                <button id="registerSubmit" type="submit" class="btn btn-primary w-100 py-2 mt-2">
+                    Register
+                </button>
+
+                <hr class="my-4">
+
+                <div class="text-center">
+                    <p class="mb-1">Already have an account?</p>
+                    <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl" class="btn btn-outline-primary w-100">
+                        Log in
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

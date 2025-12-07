@@ -1,0 +1,83 @@
+﻿@model IEnumerable<ClinicManagement.Models.Appointment>
+
+<div class="container mt-4">
+    
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold">Patient Medical History</h2>
+
+        <a asp-action="PrintPatientReport"
+           asp-controller="Patients"
+           asp-route-id="@Model.First().Patient.Id"
+           class="btn btn-outline-dark">
+            🖨 Print Full Report
+        </a>
+    </div>
+    <hr />
+
+
+    @if (Model.Any())
+    {
+        <h4 class="mb-3">Patient: <span class="text-primary">@Model.First().Patient.Name</span></h4>
+        <p class="text-muted">Total visits: @Model.Count()</p>
+
+        <table class="table table-hover table-bordered mt-3 align-middle">
+            <thead class="table-primary">
+                <tr>
+                    <th style="width: 180px;">Date</th>
+                    <th style="width: 200px;">Diagnosis</th>
+                    <th>Doctor Notes</th>
+                    <th style="width: 220px;">Attached Files</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var visit in Model)
+                {
+                    <tr>
+                        <td>@visit.Date.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@visit.Patient.Diagnosis</td>
+                        <td style="max-width: 350px;">
+                            @if (string.IsNullOrEmpty(visit.DoctorNotes))
+                            {
+                                <span class="text-muted">No notes</span>
+                            }
+                            else
+                            {
+                                @visit.DoctorNotes
+                            }
+                        </td>
+
+                        <td>
+                            @if (visit.MedicalFiles != null && visit.MedicalFiles.Any())
+                            {
+                                @foreach (var file in visit.MedicalFiles)
+                                {
+                                    <div class="d-flex align-items-center mb-1">
+                                        <i class="bi bi-paperclip me-2"></i>
+                                        <a href="@file.FilePath" class="me-2" target="_blank">
+                                            @file.FileName
+                                        </a>
+                                        <a href="@file.FilePath" download class="btn btn-sm btn-outline-secondary">
+                                            Download
+                                        </a>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-muted">No files</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            No previous visits recorded.
+        </div>
+    }
+
+
+</div>

@@ -1,0 +1,138 @@
+﻿@model IEnumerable<ClinicManagement.Models.Appointment>
+
+@{
+    ViewData["Title"] = "Today's Appointments";
+}
+
+<style>
+    .title-today {
+        font-size: 27px;
+        font-weight: 700;
+        color: #124f8a;
+    }
+
+    .appt-table {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0px 4px 16px rgba(0,0,0,0.07);
+    }
+
+        .appt-table thead th {
+            background: #0e406c !important;
+            color: #fff;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .appt-table tbody td {
+            vertical-align: middle;
+        }
+
+        .appt-table tbody tr:hover {
+            background-color: #eef5ff !important;
+        }
+
+    .badge {
+        padding: 5px 9px;
+        font-size: 0.82rem;
+    }
+
+    .btn-sm {
+        border-radius: 6px !important;
+        padding: 3px 8px;
+    }
+
+    .btn-outline-primary,
+    .btn-outline-secondary,
+    .btn-outline-warning,
+    .btn-outline-danger,
+    .btn-outline-success {
+        border-width: 1px;
+    }
+
+    .alert-info {
+        background-color: #eaf4ff;
+        border-color: #cbdff5;
+    }
+</style>
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="title-today">🗓️ Today's Appointments</h2>
+        <a asp-action="Index" class="btn btn-secondary">
+            ← Back to All Appointments
+        </a>
+    </div>
+
+    @await Html.PartialAsync("_AppointmentFilter")
+
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info shadow-sm">
+            ☕ No appointments scheduled for today.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover table-striped align-middle appt-table">
+                <thead>
+                    <tr>
+                        <th style="width: 80px;">Time</th>
+                        <th>Patient</th>
+                        <th>Doctor</th>
+                        <th>Notes</th>
+                        <th>Status</th>
+                        <th style="width: 220px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var appt in Model.OrderBy(a => a.Date))
+                    {
+                        <tr>
+                            <td><strong>@appt.Date.ToString("HH:mm")</strong></td>
+                            <td>@appt.Patient?.Name</td>
+                            <td>@appt.Doctor?.Email</td>
+                            <td>@(string.IsNullOrEmpty(appt.Notes) ? "-" : appt.Notes)</td>
+
+                            <td>
+                                @if (appt.Status == AppointmentStatus.Arrived)
+                                {
+                                    <span class="badge bg-success">Arrived</span>
+                                }
+                                else if (appt.Status == AppointmentStatus.NoShow)
+                                {
+                                    <span class="badge bg-secondary">No-Show</span>
+                                }
+                                else if (appt.Status == AppointmentStatus.Cancelled)
+                                {
+                                    <span class="badge bg-danger">Cancelled</span>
+                                }
+                                else if (appt.Status == AppointmentStatus.Completed)
+                                {
+                                    <span class="badge bg-info text-dark">Completed</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark">Scheduled</span>
+                                }
+                            </td>
+
+                            <td>
+                                <div class="btn-group">
+                                    <a asp-action="MarkArrived" asp-route-id="@appt.Id" class="btn btn-sm btn-outline-success">Arrived</a>
+                                    <a asp-action="MarkNoShow" asp-route-id="@appt.Id" class="btn btn-sm btn-outline-secondary">No-Show</a>
+                                    <a asp-action="MarkCancelled" asp-route-id="@appt.Id" class="btn btn-sm btn-outline-danger">Cancel</a>
+                                    <a asp-action="Reschedule" asp-route-id="@appt.Id" class="btn btn-sm btn-outline-primary">Reschedule</a>
+                                </div>
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

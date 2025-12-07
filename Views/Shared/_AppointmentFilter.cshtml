@@ -1,0 +1,23 @@
+﻿<form method="get" asp-action="Index" class="mb-3 d-flex">
+
+    <select name="doctorId" class="form-select me-2" style="max-width: 250px;">
+        <option value="">-- All Doctors --</option>
+        @foreach (var doc in ViewBag.Doctors)
+        {
+            <option value="@doc.Id">@doc.Email</option>
+        }
+    </select>
+
+    <!-- Patient Search -->
+    <input type="text" name="patientName"
+           class="form-control me-2"
+           style="max-width: 250px;"
+           value="@(Context.Request.Query["patientName"])"
+           placeholder="Search patient name..." />
+
+    <button type="submit" class="btn btn-primary">Filter</button>
+
+    <a href="/Appointment" class="btn btn-secondary">
+        Clear
+    </a>
+</form>

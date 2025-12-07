@@ -1,0 +1,19 @@
+﻿@model ClinicManagement.Models.Appointment
+
+<div class="container mt-4">
+    <a asp-action="MyAppointments" class="btn btn-secondary mb-3">Back</a>
+
+    <h2>🤖 AI Medical Summary</h2>
+    <hr />
+
+    @if (string.IsNullOrEmpty(Model.AISummary))
+    {
+        <p>No AI summary was generated yet.</p>
+    }
+    else
+    {
+        <textarea class="form-control" style="height:200px;" readonly>
+@Model.AISummary
+        </textarea>
+    }
+</div>

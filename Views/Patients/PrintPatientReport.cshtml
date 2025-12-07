@@ -1,0 +1,81 @@
+﻿@model IEnumerable<ClinicManagement.Models.Appointment>
+
+<style>
+    /* Hide buttons when printing */
+    @@media print {
+        .no-print {
+            display: none !important;
+        }
+
+        body {
+            background: white !important;
+        }
+    }
+
+    .report-header {
+        border-bottom: 2px solid #000;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="container mt-4">
+
+    <!-- Print Button -->
+    <div class="no-print mb-3">
+        <button onclick="window.print()" class="btn btn-dark">🖨 Print Report</button>
+        <a asp-action="History" asp-controller="Patient" asp-route-id="@ViewBag.PatientId" class="btn btn-secondary ms-2">Back</a>
+    </div>
+
+    <!-- Report Header -->
+    <div class="report-header">
+        <h2 class="fw-bold">Patient Medical Report</h2>
+        <p><b>Date Generated:</b> @DateTime.Now</p>
+    </div>
+
+    <!-- Patient Details -->
+    <h4><b>Patient Name:</b> @ViewBag.PatientName</h4>
+    <p><b>Total Visits:</b> @Model.Count()</p>
+
+    <hr />
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning mt-4">
+            This patient has no recorded medical visits yet.
+        </div>
+    }
+    else
+    {
+        <table class="table table-striped table-bordered mt-4">
+            <thead class="table-light">
+                <tr>
+                    <th style="width:150px;">Date</th>
+                    <th style="width:250px;">Doctor</th>
+                    <th>Diagnosis</th>
+                    <th>Doctor Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var visit in Model)
+                {
+                    <tr>
+                        <td>@visit.Date.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@visit.Doctor?.Email</td>
+                        <td>@visit.Patient.Diagnosis</td>
+                        <td>@visit.DoctorNotes</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <hr />
+
+    <!-- Confidentiality Notice -->
+    <p class="text-muted mt-3" style="font-size: 0.9rem;">
+        <strong>Confidential:</strong> This medical report contains sensitive patient information.
+        Unauthorized distribution or copying is strictly prohibited under applicable medical privacy laws.
+    </p>
+
+</div>

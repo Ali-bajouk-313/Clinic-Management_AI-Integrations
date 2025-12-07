@@ -1,0 +1,85 @@
+﻿@model IEnumerable<ClinicManagement.Models.UserRolesVM>
+
+<style>
+    .assign-title {
+        font-size: 26px;
+        font-weight: 700;
+        color: #1f5fa7;
+        margin-bottom: 15px;
+    }
+
+    .assign-table {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0px 4px 14px rgba(0,0,0,0.08);
+    }
+
+        .assign-table thead th {
+            background: #0f4572 !important;
+            color: #fff;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .assign-table tbody tr:hover {
+            background-color: #e8f2ff;
+        }
+
+    .badge-role {
+        background-color: #e6ecf3;
+        border-radius: 5px;
+        padding: 5px 10px;
+        margin: 2px;
+        display: inline-block;
+        font-weight: 500;
+        color: #1e293b;
+    }
+
+    .btn-sm {
+        border-radius: 6px;
+        padding: 4px 10px;
+    }
+</style>
+
+<div class="container mt-4">
+
+    <h2 class="assign-title">👤 Assign Roles to Users</h2>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover assign-table">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Current Roles</th>
+                    <th>Assign Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.Email</td>
+                        <td>
+                            @if (user.Roles.Any())
+                            {
+                                @foreach (var role in user.Roles)
+                                {
+                                    <span class="badge-role">@role</span>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-muted">No roles assigned</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <a asp-action="Edit" asp-route-id="@user.UserId" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-person-plus"></i> Assign
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
